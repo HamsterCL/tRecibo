@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item
+    android:icon="@drawable/home_home"
+    android:id="@+id/page_home"
+    android:title="@string/home_home" />
+<item
+    android:icon="@drawable/home_payment"
+    android:id="@+id/page_payment"
+    android:title="@string/home_payment" />
+<item
+    android:icon="@drawable/home_trx"
+    android:id="@+id/page_collect"
+    android:title="@string/home_collect" />
+<item
+    android:icon="@drawable/home_exit"
+    android:id="@+id/page_exit"
+    android:title="@string/home_exit"/>
+
+</menu>

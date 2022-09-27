@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">tRecibo</string>
+
+    <string name="login_email_hint">Correo Electrónico</string>
+    <string name="login_password_hint">Contraseña</string>
+    <string name="login_button_login">Ingresar</string>
+    <string name="login_other_method_text">Otros Métodos de Ingreso</string>
+
+
+    <string name="register_name_hint">Nombre Completo</string>
+    <string name="register_email_hint">Correo Electrónico</string>
+    <string name="register_password_hint">Contraseña</string>
+    <string name="register_phone_hint">Número Telefónico</string>
+    <string name="register_button_register">Registrar</string>
+    <string name="todo">TODO</string>
+    <string name="default_notification_channel_id" />
+    <string name="fcm_message">fcm_message</string>
+
+    <string name="home_collect">Cobro</string>
+    <string name="home_help">Ayuda</string>
+    <string name="home_payment">Pagar</string>
+    <string name="home_transaction">Pagos</string>
+    <string name="home_home">Home</string>
+    <string name="home_exit">Salir</string>
+
+    <string name="home_tooltips_exit">Salir de Aplicación</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/login_bk_color"
+    android:focusableInTouchMode="true"
+    tools:context="cl.santotomas.trecibo.HomeActivity">
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="11dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ic_side_bg" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scrollViewHome"
+        android:layout_marginTop="537dp"
+        android:background="@color/ic_launcher_background"
+        app:labelVisibilityMode="labeled"
+
+        app:layout_constraintBottom_toBottomOf="@id/scrollViewHome"
+        app:menu="@menu/bottom_nav_menu" />
+
+    <ScrollView
+        android:id="@+id/scrollViewHome"
+        android:layout_width="match_parent"
+        android:layout_height="186dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="-19dp"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/txtWelcome"
+                    style="@style/viewParent.headerText.NoMode"
+                    android:layout_width="238dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="21dp"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/imgOval"
+                    android:layout_width="117dp"
+                    android:layout_height="117dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="-2dp"
+                    android:layout_marginRight="11dp"
+                    android:src="@drawable/ic_oval" />
+
+                <TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="239dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtWelcome"
+                    android:layout_marginTop="4dp"
+                    android:textAlignment="textStart"
+                    android:textSize="10sp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgUser"
+                    android:layout_width="88dp"
+                    android:layout_height="85dp"
+                    android:layout_alignStart="@+id/imgOval"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp" />
+
+                <ImageButton
+                    android:id="@+id/btnAccount"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/txtEmail"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorAccent"
+                    app:srcCompat="@drawable/home_account"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputEmail"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputPassword"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>
