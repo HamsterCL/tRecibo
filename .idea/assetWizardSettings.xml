@@ -37,7 +37,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$USER_HOME$/Downloads/account.png" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/3356068.png" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -71,8 +71,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/account.png" />
-                                      <entry key="outputName" value="home_account" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/3356068.png" />
+                                      <entry key="outputName" value="home_about" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>
@@ -381,7 +381,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialiconsoutlined/assignment_ind/outline_assignment_ind_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/description/baseline_description_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -391,8 +391,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="11cfc5" />
-                            <entry key="outputName" value="ic_outline_assignment_ind_24" />
+                            <entry key="outputName" value="ic_baseline_description_24" />
                             <entry key="sourceFile" value="$USER_HOME$/Downloads/login_google.svg" />
                           </map>
                         </option>

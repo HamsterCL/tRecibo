@@ -1,5 +1,7 @@
 package cl.santotomas.trecibo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +42,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText edTextEmail, edTextPassword;
     private TextInputLayout txtIEmail, txtIPassword;
+
+    private AlertDialog.Builder builder;
+
+
 
     private RelativeLayout rlLogin;
 
@@ -222,8 +228,6 @@ public class LoginActivity extends AppCompatActivity {
 
         final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-
-
         if (edTextEmail.length() == 0) {
             toggleTextInputLayoutError(txtIEmail, "Este campo es Requerido.");
             return false;
@@ -243,6 +247,7 @@ public class LoginActivity extends AppCompatActivity {
             toggleTextInputLayoutError(txtIEmail, "Formato erroneo del Correo Electrónico.");
             return false;
         }
+
         txtIEmail.clearFocus();
         txtIPassword.clearFocus();
 
@@ -256,7 +261,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showMessage(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+        builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(text)
+                .setCancelable(false)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setIcon(R.drawable.ic_icon_error_alert);
+        alertDialog.setTitle("Validación");
+        alertDialog.show();
     }
 
     private void onCleanAllTextInputLayout() {

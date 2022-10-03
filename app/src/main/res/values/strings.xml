@@ -22,6 +22,13 @@
     <string name="home_transaction">Pagos</string>
     <string name="home_home">Home</string>
     <string name="home_exit">Salir</string>
+    <string name="home_about">Acerca de</string>
+
+    <string name="collect_amount">Monto</string>
+    <string name="collect_btn_qr">Crear QR</string>
+    <string name="collect_description">Descripción del Cobro</string>
+
+    <string name="payqr_name_hint">Nombre de Usuario</string>
 
     <string name="home_tooltips_exit">Salir de Aplicación</string>
     <!-- TODO: Remove or change this placeholder text -->

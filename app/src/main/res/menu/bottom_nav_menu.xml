@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fontFamily="@font/abeezee">
 
 <item
     android:icon="@drawable/home_home"
@@ -14,8 +15,8 @@
     android:id="@+id/page_collect"
     android:title="@string/home_collect" />
 <item
-    android:icon="@drawable/home_exit"
-    android:id="@+id/page_exit"
-    android:title="@string/home_exit"/>
+    android:icon="@drawable/home_about"
+    android:id="@+id/page_about"
+    android:title="@string/home_about"/>
 
 </menu>

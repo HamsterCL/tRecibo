@@ -1,5 +1,7 @@
 package cl.santotomas.trecibo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -32,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout textInputName, textInputEmail, textInputMobile, textInputPassword;
     private TextInputEditText editTextName, editTextEmail, editTextMobile, editTextPassword;
     private CircularProgressButton btnRegister;
+
+    private AlertDialog.Builder builder;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -268,7 +272,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void showMessage(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(text)
+                .setCancelable(false)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setIcon(R.drawable.ic_icon_error_alert);
+        alertDialog.setTitle("Validación");
+        alertDialog.show();
     }
 
 

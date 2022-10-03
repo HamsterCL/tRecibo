@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeSplash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cl.santotomas.trecibo.SplashActivity"
-    android:background="@color/whiteTextColor"
+    android:layout_gravity="center"
+    android:background="@color/login_bk_color"
     android:focusableInTouchMode="true"
     android:gravity="center"
-    android:layout_gravity="center"
-    android:id="@+id/relativeSplash">
+    tools:context="cl.santotomas.trecibo.SplashActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -32,7 +31,7 @@
         android:layout_below="@+id/imageView"
         android:layout_marginTop="104dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/colorPrimaryDark"
+        android:indeterminateTint="@color/colorAccent"
         android:progress="1"
         android:scrollbarStyle="insideInset" />
 

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentAbout">
+
+    <RelativeLayout
+        android:id="@+id/relativeLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/login_bk_color"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        tools:context="cl.santotomas.trecibo.LoginActivity">
+
+        <ScrollView
+            android:layout_width="363dp"
+            android:layout_height="457dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="328dp"
+                    android:layout_height="132dp"
+                    android:layout_marginStart="-6dp"
+                    android:src="@drawable/ic_about_logo_santotomas" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="-1dp"
+                            android:fontFamily="@font/abeezee"
+                            android:paddingBottom="30dp"
+                            android:text="Proyecto de Fin de Semestre de la asignatura &quot;Programación Android&quot;\n\n\n Santiago, Diciembre del 2022"
+                            android:textAlignment="center"
+                            android:textColor="@color/darkTextColor"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
+                </ScrollView>
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abeezee"
+                    android:text="Profesor: Hans W. Parra Yañez"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abeezee"
+                    android:text="Alumno: Hector A. Mödinger Santis"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_width="322dp"
+                    android:layout_height="38dp">
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="41dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_toEndOf="@+id/textView9"
+                        android:src="@drawable/ic_about_tech_firebase" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="49dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignEnd="@+id/imageView7"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="-50dp"
+                        android:src="@drawable/ic_about_tech_android" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tencología usada:" />
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="38dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="52dp"
+                        android:layout_toEndOf="@+id/imageView7"
+                        android:src="@drawable/ic_about_tech_mongo" />
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="39dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="-1dp"
+                        android:layout_toEndOf="@+id/imageView8"
+                        android:src="@drawable/ic_about_tech_node" />
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:layout_width="36dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignEnd="@+id/imageView9"
+                        android:layout_marginEnd="-38dp"
+                        android:src="@drawable/ic_about_tech_nestjs" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+</FrameLayout>

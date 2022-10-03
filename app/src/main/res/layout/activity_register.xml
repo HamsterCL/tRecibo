@@ -32,6 +32,7 @@
                     style="@style/viewParent.headerText.NoMode"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:fontFamily="@font/abeezee"
                     android:text="Aquí\nes nuestro\nprimer paso \njunto a tí! "
                     android:textColor="@color/whiteTextColor" />
 
@@ -73,10 +74,11 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextName"
                             style="@style/modifiedEditText"
+                            android:fontFamily="@font/abeezee"
                             android:hint="@string/register_name_hint"
                             android:inputType="textPersonName"
-                            android:maxLines="1"
-                            android:maxLength="40"/>
+                            android:maxLength="40"
+                            android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -88,10 +90,11 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextEmail"
                             style="@style/modifiedEditText"
+                            android:fontFamily="@font/abeezee"
                             android:hint="@string/register_email_hint"
                             android:inputType="textEmailAddress"
-                            android:maxLines="1"
-                            android:maxLength="40"/>
+                            android:maxLength="40"
+                            android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -103,6 +106,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextMobile"
                             style="@style/modifiedEditText"
+                            android:fontFamily="@font/abeezee"
                             android:hint="@string/register_phone_hint"
                             android:inputType="number"
                             android:maxLength="9"
@@ -119,10 +123,11 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPassword"
                             style="@style/modifiedEditText"
+                            android:fontFamily="@font/abeezee"
                             android:hint="@string/login_password_hint"
                             android:inputType="textPassword"
-                            android:maxLines="1"
-                            android:maxLength="40"/>
+                            android:maxLength="40"
+                            android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
@@ -130,6 +135,7 @@
                         style="@style/loginButton"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/loginViewsMargin"
+                        android:fontFamily="@font/abeezee"
                         android:text="@string/register_button_register"
                         app:initialCornerAngle="27dp"
                         app:spinning_bar_color="#FFF"
@@ -139,6 +145,7 @@
                     <TextView
                         style="@style/parent"
                         android:layout_marginTop="@dimen/loginViewsMargin"
+                        android:fontFamily="@font/abeezee"
                         android:onClick="onLoginClick"
                         android:text="¿Ya tienes una cuenta?"
                         android:textAlignment="center"
