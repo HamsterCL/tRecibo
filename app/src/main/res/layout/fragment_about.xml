@@ -7,14 +7,14 @@
     tools:context=".FragmentAbout">
 
     <RelativeLayout
-        android:id="@+id/relativeLogin"
+        android:id="@+id/relativePayments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@color/login_bk_color"
         android:focusableInTouchMode="true"
         android:gravity="center"
-        tools:context="cl.santotomas.trecibo.LoginActivity">
+        tools:context=".LoginActivity">
 
         <ScrollView
             android:layout_width="363dp"
@@ -126,7 +126,10 @@
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tencología usada:" />
+                        android:fontFamily="@font/abeezee"
+                        android:text="Tecnología usada:"
+                        android:textColor="@color/darkTextColor"
+                        android:textSize="12sp" />
 
                     <ImageView
                         android:id="@+id/imageView8"

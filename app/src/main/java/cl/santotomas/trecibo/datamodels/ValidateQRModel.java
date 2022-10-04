@@ -20,6 +20,12 @@ public class ValidateQRModel implements Serializable {
         this.qr = qr;
     }
 
+    public ValidateQRModel(String amount, String reason, String status) {
+        this.amount = amount;
+        this.reason = reason;
+        this.status = status;
+    }
+
     public ValidateQRModel() {
     }
 

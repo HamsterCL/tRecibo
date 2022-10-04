@@ -7,7 +7,7 @@ android:layout_height="match_parent"
 tools:context=".FragmentQr">
 
 <RelativeLayout
-    android:id="@+id/relativeLogin"
+    android:id="@+id/relativePayments"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"

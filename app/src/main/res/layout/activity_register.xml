@@ -133,6 +133,8 @@
                     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                         android:id="@+id/cirRegisterButton"
                         style="@style/loginButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/loginViewsMargin"
                         android:fontFamily="@font/abeezee"

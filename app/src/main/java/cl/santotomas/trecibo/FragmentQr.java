@@ -71,32 +71,25 @@ public class FragmentQr extends Fragment {
                             call.enqueue(new Callback<ValidateQRModel>() {
                                 @Override
                                 public void onResponse(Call<ValidateQRModel> call, Response<ValidateQRModel> response) {
-                                    if (response.body().getId() != null) {
-                                        new ValidateQRModel();
-                                        ValidateQRModel validate;
-                                        validate = response.body();
-                                        Bundle bViewQR = new Bundle();
-                                        bViewQR.putString("validate", new Gson().toJson(validate));
-                                        dialogFragment.setArguments(bViewQR);
-                                        dialogFragment.show(getChildFragmentManager(), "");
+                                    if (response.body() != null) {
+                                        if (response.body().getId() != null) {
+                                            new ValidateQRModel();
+                                            ValidateQRModel validate;
+                                            validate = response.body();
+                                            Bundle bViewQR = new Bundle();
+                                            bViewQR.putString("validate", new Gson().toJson(validate));
+                                            dialogFragment.setArguments(bViewQR);
+                                            dialogFragment.show(getChildFragmentManager(), "");
+                                        }
+                                    }
+                                    else {
+                                        messageDialog("El código QR que ha presentado es inváido, favor volver a generar el código QR y realizar el pago. Muchas Gracias!", "Ups!");
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ValidateQRModel> call, Throwable t) {
-                                    AlertDialog.Builder builder;
-                                    builder = new AlertDialog.Builder(getContext());
-                                    builder.setMessage("Tenemos problemas en la plataforma, por favor vuelva a intentar el cobro en otro momento. Gracias ;)")
-                                            .setCancelable(false)
-                                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.cancel();
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.setTitle("Ups!");
-                                    alert.setIcon(R.drawable.ic_icon_warning_alert);
-                                    alert.show();
+                                    messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar el cobro en otro momento. Gracias ;)", "Ups!");
                                     Log.d("PostValidateQR", "PostValidateQR Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
                                 }
                             });
@@ -159,5 +152,21 @@ public class FragmentQr extends Fragment {
         Call<ValidateQRModel> call = apitRecibo.validateCreateQR("Bearer {token}", dataModel);
 
         return call;
+    }
+
+    private void messageDialog(String text, String title) {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(text)
+                .setCancelable(false)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.setTitle(title);
+        alert.setIcon(R.drawable.ic_icon_warning_alert);
+        alert.show();
     }
 }

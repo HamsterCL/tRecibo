@@ -69,7 +69,7 @@ public class FragmentPayqr extends DialogFragment {
             String bValidate = bundle.getString("validate");
             validate = new Gson().fromJson(bValidate, ValidateQRModel.class);
             txtUserName.setText(validate.getInvoice());
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy hh:mm a", new Locale("es", "ES"));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy hh:mm a", new Locale("es", "CL"));
             String dte =  simpleDateFormat.format(new Date());
             txtDate.setText(dte);
             txtAmount.setText(validate.getAmount());

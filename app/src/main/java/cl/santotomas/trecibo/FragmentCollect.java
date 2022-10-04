@@ -1,10 +1,7 @@
 package cl.santotomas.trecibo;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,14 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -30,9 +23,6 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
-
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cl.santotomas.trecibo.datamodels.CreateQRModel;
 import cl.santotomas.trecibo.interfaces.APITRecibo;
@@ -89,29 +79,22 @@ public class FragmentCollect extends Fragment {
                                 call.enqueue(new Callback<CreateQRModel>() {
                                     @Override
                                     public void onResponse(Call<CreateQRModel> call, Response<CreateQRModel> response) {
-                                        if (response.body().getData() != null) {
-                                            Bundle bViewQR = new Bundle();
-                                            bViewQR.putString("qr", response.body().getData());
-                                            dialogFragment.setArguments(bViewQR);
-                                            dialogFragment.show(getChildFragmentManager(),"");
+                                        if (response.body() != null) {
+                                            if (response.body().getData() != null) {
+                                                Bundle bViewQR = new Bundle();
+                                                bViewQR.putString("qr", response.body().getData());
+                                                dialogFragment.setArguments(bViewQR);
+                                                dialogFragment.show(getChildFragmentManager(), "");
+                                            }
+                                        }
+                                        else {
+                                            messageDialog("Nuestros sistemas presenta problemas. Favor de volver a intentar en unos instantes. Disculpe las molestias!", "Ups!");
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<CreateQRModel> call, Throwable t) {
-                                        AlertDialog.Builder builder;
-                                        builder = new AlertDialog.Builder(getContext());
-                                        builder.setMessage("Tenemos problemas en la plataforma, por favor vuelva a intentar el cobro en otro momento. Gracias ;)")
-                                                .setCancelable(false)
-                                                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int id) {
-                                                        dialog.cancel();
-                                                    }
-                                                });
-                                        AlertDialog alert = builder.create();
-                                        alert.setTitle("Ups!");
-                                        alert.setIcon(R.drawable.ic_icon_warning_alert);
-                                        alert.show();
+                                        messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar el cobro en otro momento. Gracias ;)", "Ups!");
                                         Log.d("PostCreateQR", "PostCreateQR Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
                                     }
                                 });
@@ -188,5 +171,21 @@ public class FragmentCollect extends Fragment {
     private static void toggleTextInputLayoutError(@NonNull TextInputLayout textInputLayout, String msg) {
         textInputLayout.setError(msg);
         textInputLayout.setErrorEnabled(msg != null);
+    }
+
+    private void messageDialog(String text, String title) {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(text)
+                .setCancelable(false)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.setTitle(title);
+        alert.setIcon(R.drawable.ic_icon_warning_alert);
+        alert.show();
     }
 }
