@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cl.santotomas.trecibo.adapter.ClickAdapter;
 import cl.santotomas.trecibo.adapter.ImageGalleryAdapter;
 import cl.santotomas.trecibo.datamodels.PaymentModel;
 import cl.santotomas.trecibo.interfaces.APITRecibo;
@@ -44,6 +45,8 @@ public class FragmentPayment extends Fragment {
 
     public ImageGalleryAdapter adapter;
     public RecyclerView recyclerView;
+    public ClickAdapter listener;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class FragmentPayment extends Fragment {
                         @Override
                         public void onResponse(Call<List<PaymentModel>> call, Response<List<PaymentModel>> response) {
                             if (response.body() != null) {
-                                adapter = new ImageGalleryAdapter(response.body(), getContext());
+                                adapter = new ImageGalleryAdapter(response.body(), getContext(), listener);
                                 recyclerView.setAdapter(adapter);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                             } else {

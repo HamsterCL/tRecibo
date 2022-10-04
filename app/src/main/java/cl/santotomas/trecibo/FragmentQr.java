@@ -38,9 +38,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentQr extends Fragment {
 
     private FirebaseAuth mAuth;
-
     private QRCodeReaderView qrCodeReaderView;
-    FragmentPayqr dialogFragment = new FragmentPayqr();
+    private FragmentPayqr dialogFragment = new FragmentPayqr();
 
     private static final String URL_VALIDATE_QR = "https://secure.tooltips.cl";
 
@@ -48,8 +47,6 @@ public class FragmentQr extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -73,7 +70,6 @@ public class FragmentQr extends Fragment {
                                 public void onResponse(Call<ValidateQRModel> call, Response<ValidateQRModel> response) {
                                     if (response.body() != null) {
                                         if (response.body().getId() != null) {
-                                            new ValidateQRModel();
                                             ValidateQRModel validate;
                                             validate = response.body();
                                             Bundle bViewQR = new Bundle();

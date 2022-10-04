@@ -1,7 +1,12 @@
 package cl.santotomas.trecibo.adapter;
 
-public interface ClickAdapter {
+import android.util.Log;
 
-    public void click(int index);
+public class ClickAdapter {
+
+    public void click(int index) {
+        Log.d("PaymentsModel", String.valueOf(index));
+    }
 
 }
+

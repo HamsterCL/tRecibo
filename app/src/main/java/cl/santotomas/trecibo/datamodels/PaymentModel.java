@@ -16,6 +16,19 @@ public class PaymentModel implements Serializable {
 
     }
 
+    @Override
+    public String toString() {
+        return "PaymentModel{" +
+                "id='" + id + '\'' +
+                ", user='" + user + '\'' +
+                ", amount='" + amount + '\'' +
+                ", date='" + date + '\'' +
+                ", reason='" + reason + '\'' +
+                ", status='" + status + '\'' +
+                ", authorization_code='" + authorization_code + '\'' +
+                '}';
+    }
+
     public PaymentModel(String id, String user, String amount, String date, String reason, String status, String authorization_code) {
         this.id = id;
         this.user = user;
