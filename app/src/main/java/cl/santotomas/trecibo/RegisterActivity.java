@@ -26,10 +26,26 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.io.IOException;
+import java.util.Objects;
+
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import cl.santotomas.trecibo.datamodels.AccountModel;
+import cl.santotomas.trecibo.datamodels.CreateQRModel;
+import cl.santotomas.trecibo.interfaces.APITRecibo;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private static final String URL_CREATE_ACCOUNT = "http://192.168.1.122:3000";
 
     private TextInputLayout textInputName, textInputEmail, textInputMobile, textInputPassword;
     private TextInputEditText editTextName, editTextEmail, editTextMobile, editTextPassword;
@@ -90,67 +106,67 @@ public class RegisterActivity extends AppCompatActivity {
                             switch (errorCode) {
 
                                 case "ERROR_INVALID_CUSTOM_TOKEN":
-                                    showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                                    messageDialog("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_CUSTOM_TOKEN_MISMATCH":
-                                    showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                                    messageDialog("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_INVALID_CREDENTIAL":
-                                    showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                                    messageDialog("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_INVALID_EMAIL":
-                                    showMessage( "Campo \"Correo Electrónico\" erróneo.");
+                                    messageDialog( "Campo \"Correo Electrónico\" erróneo.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_WRONG_PASSWORD":
-                                    showMessage("La contraseña no es válida o el usuario no tiene contraseña.");
+                                    messageDialog("La contraseña no es válida o el usuario no tiene contraseña.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_USER_MISMATCH":
-                                    showMessage("Las credenciales proporcionadas no corresponden al usuario que inició sesión anteriormente.");
+                                    messageDialog("Las credenciales proporcionadas no corresponden al usuario que inició sesión anteriormente.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_REQUIRES_RECENT_LOGIN":
-                                    showMessage("Esta operación es confidencial y requiere autenticación reciente. Vuelva a iniciar sesión antes de volver a intentar esta solicitud.");
+                                    messageDialog("Esta operación es confidencial y requiere autenticación reciente. Vuelva a iniciar sesión antes de volver a intentar esta solicitud.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                                    showMessage("Ya existe una cuenta con la misma dirección de correo electrónico pero con diferentes credenciales de inicio de sesión. Inicie sesión con un proveedor asociado con esta dirección de correo electrónico.");
+                                    messageDialog("Ya existe una cuenta con la misma dirección de correo electrónico pero con diferentes credenciales de inicio de sesión. Inicie sesión con un proveedor asociado con esta dirección de correo electrónico.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_EMAIL_ALREADY_IN_USE":
-                                    showMessage("La dirección de correo electrónico ya está en uso por otra cuenta.");
+                                    messageDialog("La dirección de correo electrónico ya está en uso por otra cuenta.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-                                    showMessage("Esta credencial ya está asociada con una cuenta de usuario diferente.");
+                                    messageDialog("Esta credencial ya está asociada con una cuenta de usuario diferente.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_USER_DISABLED":
-                                    showMessage("La cuenta de usuario ha sido deshabilitada.");
+                                    messageDialog("La cuenta de usuario ha sido deshabilitada.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_USER_TOKEN_EXPIRED":
-                                    showMessage("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.");
+                                    messageDialog("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_USER_NOT_FOUND":
-                                    showMessage("El correo eletrónico o contraseña proporcionada no es válido.");
+                                    messageDialog("El correo eletrónico o contraseña proporcionada no es válido.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_INVALID_USER_TOKEN":
-                                    showMessage("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.");
+                                    messageDialog("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_OPERATION_NOT_ALLOWED":
-                                    showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                                    messageDialog("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
 
                                 case "ERROR_WEAK_PASSWORD":
-                                    showMessage("La contraseña proporcionada no es válida.");
+                                    messageDialog("La contraseña proporcionada no es válida.", "Validación", R.drawable.ic_icon_warning_alert);
                                     break;
                             }
                         }
@@ -174,6 +190,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
+
+
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(editTextName.getText().toString())
                 .setPhotoUri(Uri.parse("https://firebasestorage.googleapis.com/v0/b/trecibo-1f834.appspot.com/o/logo_trecibo.png?alt=media&token=971e9882-9b8c-4dc2-9e96-2774ea5d9255"))
@@ -182,13 +200,31 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(HomeActivity);
-                        } else {
+                        if (!task.isSuccessful()) {
                             Log.d("UpdateUserRegister", task.getException().getMessage());
                         }
                     }
                 });
+
+        Log.d("UID", user.getUid());
+        Call call =  postCreateAccount(editTextName.getText().toString(), editTextMobile.getText().toString(), user.getUid());
+        call.enqueue(new Callback<AccountModel>() {
+            @Override
+            public void onResponse(Call<AccountModel> call, Response<AccountModel> response) {
+                if (response.body() != null) {
+                    messageDialogWelcome("Le damos la bienvenida a nuestra APP tRecibo y le damos las gracias por registrarse. Ya puede utilizar las prestaciones de tRecibo.", "Registro", R.drawable.ic_icon_success_alert);
+                }
+                else {
+                    messageDialog("Nuestros sistemas presenta problemas. Favor de volver a intentar en unos instantes. Disculpe las molestias!", "Ups!", R.drawable.ic_icon_error_alert);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccountModel> call, Throwable t) {
+                messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar en otro momento. Gracias ;)", "Ups!", R.drawable.ic_icon_warning_alert);
+                Log.d("PostCreateAccount", "PostCreateAccount Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
+            }
+        });
 
     }
 
@@ -271,20 +307,82 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void showMessage(String text) {
+    private Call postCreateAccount(String name, String phone, String uID) {
+
+        String firstName = "", lastName = "";
+
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request newRequest  = chain.request().newBuilder()
+                        .addHeader("Content-Type", "application/json")
+                        .build();
+                return chain.proceed(newRequest);
+            }
+        }).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
+                .baseUrl(URL_CREATE_ACCOUNT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APITRecibo apitRecibo = retrofit.create(APITRecibo.class);
+
+        String[] names = name.trim().split(" ");
+        switch (names.length) {
+            case 4:
+                firstName = names[0] + " " + names[1];
+                lastName = names[2] + " " + names[3];
+                break;
+            case 3:
+                firstName = names[0] + " " + names[1];
+                lastName = names[2];
+                break;
+            case 2:
+                firstName = names[0];
+                lastName = names[1];
+                break;
+            default:
+                firstName = names[0];
+        }
+
+        AccountModel dataModel = new AccountModel(firstName, lastName, Integer.parseInt(phone), uID);
+        Call<AccountModel> call = apitRecibo.postCreateAccount(dataModel);
+
+        return call;
+    }
+
+    private void messageDialog(String text, String title, int icon) {
+        AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
         builder.setMessage(text)
                 .setCancelable(false)
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();                    }
+                        dialog.cancel();
+                    }
                 });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setIcon(R.drawable.ic_icon_error_alert);
-        alertDialog.setTitle("Validación");
-        alertDialog.show();
+        AlertDialog alert = builder.create();
+        alert.setTitle(title);
+        alert.setIcon(icon);
+        alert.show();
     }
 
-
-
+    private void messageDialogWelcome(String text, String title, int icon) {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(text)
+                .setCancelable(false)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        startActivity(HomeActivity);
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.setTitle(title);
+        alert.setIcon(icon);
+        alert.show();
+    }
 }
