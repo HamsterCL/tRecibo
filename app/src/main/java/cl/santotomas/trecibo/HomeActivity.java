@@ -49,7 +49,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private static final String URL_CREATE_QR = "http://192.168.1.122:3000";
+    private static final String URL_NOTIFICATION_QR = "https://secure.tooltips.cl";
 
     private FirebaseAuth mAuth;
     private FirebaseMessageService firebaseMessageService;
@@ -203,7 +203,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(URL_CREATE_QR)
+                .baseUrl(URL_NOTIFICATION_QR)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

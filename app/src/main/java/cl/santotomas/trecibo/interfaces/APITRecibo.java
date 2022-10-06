@@ -34,7 +34,6 @@ public interface APITRecibo {
     Call<List<PaymentModel>> getPaymentsMonth(@Header("Authorization") String token);
 
     @Headers("Content-Type: application/json")
-    //@PUT("/static/account/api/account/notification")
-    @PUT("/api/account/notification")
+    @PUT("/static/account/api/account/notification")
     Call<DeviceModel> putDeviceToken(@Header("Authorization") String token, @Body DeviceModel deviceModel);
 }
