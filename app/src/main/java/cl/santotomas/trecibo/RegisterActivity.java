@@ -45,7 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final String URL_CREATE_ACCOUNT = "http://192.168.1.122:3000";
+    private static final String URL_CREATE_ACCOUNT = "https://secure.tooltips.cl";
 
     private TextInputLayout textInputName, textInputEmail, textInputMobile, textInputPassword;
     private TextInputEditText editTextName, editTextEmail, editTextMobile, editTextPassword;
@@ -207,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
                 });
 
         Log.d("UID", user.getUid());
-        Call call =  postCreateAccount(editTextName.getText().toString(), editTextMobile.getText().toString(), user.getUid());
+        Call call =  postCreateAccount(editTextName.getText().toString(), editTextMobile.getText().toString(), editTextEmail.getText().toString(), user.getUid());
         call.enqueue(new Callback<AccountModel>() {
             @Override
             public void onResponse(Call<AccountModel> call, Response<AccountModel> response) {
@@ -307,7 +307,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private Call postCreateAccount(String name, String phone, String uID) {
+    private Call postCreateAccount(String name, String phone, String email, String uID) {
 
         String firstName = "", lastName = "";
 
@@ -347,7 +347,7 @@ public class RegisterActivity extends AppCompatActivity {
                 firstName = names[0];
         }
 
-        AccountModel dataModel = new AccountModel(firstName, lastName, Integer.parseInt(phone), uID);
+        AccountModel dataModel = new AccountModel(firstName, lastName, email, Integer.parseInt(phone), uID);
         Call<AccountModel> call = apitRecibo.postCreateAccount(dataModel);
 
         return call;

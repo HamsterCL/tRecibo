@@ -22,7 +22,7 @@ import cl.santotomas.trecibo.R;
 
 public class FirebaseMessageService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFirebaseMsgService";
+    private static final String TAG = "FirebaseMsgService";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

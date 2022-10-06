@@ -39,7 +39,6 @@ public class FragmentQr extends Fragment {
 
     private FirebaseAuth mAuth;
     private QRCodeReaderView qrCodeReaderView;
-    private FragmentPayqr dialogFragment = new FragmentPayqr();
 
     private static final String URL_VALIDATE_QR = "https://secure.tooltips.cl";
 
@@ -53,6 +52,7 @@ public class FragmentQr extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+        FragmentPayqr dialogFragment = new FragmentPayqr();
 
         qrCodeReaderView = (QRCodeReaderView) getView().findViewById(R.id.camera_view);
         qrCodeReaderView.setOnQRCodeReadListener(new QRCodeReaderView.OnQRCodeReadListener() {
@@ -145,7 +145,7 @@ public class FragmentQr extends Fragment {
         APITRecibo apitRecibo = retrofit.create(APITRecibo.class);
 
         ValidateQRModel dataModel = new ValidateQRModel(code);
-        Call<ValidateQRModel> call = apitRecibo.validateCreateQR("Bearer {token}", dataModel);
+        Call<ValidateQRModel> call = apitRecibo.postValidateCreateQR("Bearer {token}", dataModel);
 
         return call;
     }

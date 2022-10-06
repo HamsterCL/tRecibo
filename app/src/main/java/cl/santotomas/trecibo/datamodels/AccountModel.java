@@ -26,12 +26,13 @@ public class AccountModel {
 
     }
 
-    public AccountModel(String first_name, String last_name, int phone, String id_unique) {
+    public AccountModel(String first_name, String last_name, String email, int phone, String id_unique) {
 
         this.first_name = first_name;
         this.last_name = last_name;
         this.phone = phone;
         this.id_unique = id_unique;
+        this.email = email;
 
     }
 

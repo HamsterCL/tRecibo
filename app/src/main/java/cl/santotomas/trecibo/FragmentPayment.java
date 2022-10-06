@@ -64,6 +64,7 @@ public class FragmentPayment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<GetTokenResult> task) {
                 if (task.isSuccessful()) {
+                    Log.d("AUTH", task.getResult().getToken());
                     Call call = listPayments(task.getResult().getToken());
                     call.enqueue(new Callback<List<PaymentModel>>() {
                         @Override
@@ -116,7 +117,7 @@ public class FragmentPayment extends Fragment {
                 .build();
 
         APITRecibo apitRecibo = retrofit.create(APITRecibo.class);
-        Call<List<PaymentModel>> call = apitRecibo.paymentsMonth("Bearer {token}");
+        Call<List<PaymentModel>> call = apitRecibo.getPaymentsMonth("Bearer {token}");
 
         return call;
     }
