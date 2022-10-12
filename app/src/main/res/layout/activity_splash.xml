@@ -54,7 +54,7 @@
         android:text="tRecibo"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="96sp"
+        android:textSize="80dp"
         android:textStyle="bold" />
 
 </RelativeLayout>
