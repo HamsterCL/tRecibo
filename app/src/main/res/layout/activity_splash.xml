@@ -41,7 +41,7 @@
         android:layout_height="33dp"
         android:layout_below="@+id/progressBar"
         android:layout_marginTop="199dp"
-        android:text="Version 1.0.67"
+        android:text="Version 1.1.72"
         android:textAlignment="center" />
 
     <TextView

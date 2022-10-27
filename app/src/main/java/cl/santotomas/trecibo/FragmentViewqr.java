@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +41,6 @@ public class FragmentViewqr extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             qr = bundle.getString("qr");
@@ -60,14 +58,11 @@ public class FragmentViewqr extends DialogFragment {
         qrgEncoder = new QRGEncoder(qr, null, QRGContents.Type.TEXT, dimen);
         bitmap = qrgEncoder.getBitmap();
         qrCodeIV.setImageBitmap(bitmap);
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override

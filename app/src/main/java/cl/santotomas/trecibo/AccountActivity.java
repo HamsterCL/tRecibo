@@ -1,7 +1,6 @@
 package cl.santotomas.trecibo;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 public class AccountActivity extends AppCompatActivity {

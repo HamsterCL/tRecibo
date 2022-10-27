@@ -64,37 +64,37 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         firebaseMessageService = new FirebaseMessageService();
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> taskTokenDevice) {
+                if (!taskTokenDevice.isSuccessful()) {
+                    Log.d("FCMToken", "Fetching FCM registration token failed", taskTokenDevice.getException());
+                    return;
+                }
+                mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<String> taskTokenDevice) {
-                        if (!taskTokenDevice.isSuccessful()) {
-                            Log.d("FCMToken", "Fetching FCM registration token failed", taskTokenDevice.getException());
-                            return;
-                        }
-                        mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<GetTokenResult> taskTokenUid) {
-                                if (taskTokenUid.isSuccessful()) {
-                                    Call call = putDeviceToken(taskTokenDevice.getResult(), taskTokenUid.getResult().getToken());
-                                    call.enqueue(new Callback<DeviceModel>() {
-                                        @Override
-                                        public void onResponse(Call<DeviceModel> call, Response<DeviceModel> response) {
-                                            if (response.body() == null) {
-                                                messageDialog("Nuestros sistemas presenta problemas. Favor de volver a intentar en unos instantes. Disculpe las molestias!", "Ups!");
-                                            }
-                                        }
-                                        @Override
-                                        public void onFailure(Call<DeviceModel> call, Throwable t) {
-                                            messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar en otro momento. Gracias ;)", "Ups!");
-                                            Log.d("DeviceToken", "DeviceToken Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
-                                        }
-                                    });
+                    public void onComplete(@NonNull Task<GetTokenResult> taskTokenUid) {
+                        if (taskTokenUid.isSuccessful()) {
+                            Call call = putDeviceToken(taskTokenDevice.getResult(), taskTokenUid.getResult().getToken());
+                            call.enqueue(new Callback<DeviceModel>() {
+                                @Override
+                                public void onResponse(Call<DeviceModel> call, Response<DeviceModel> response) {
+                                    if (response.body() == null) {
+                                        messageDialog("Nuestros sistemas presenta problemas. Favor de volver a intentar en unos instantes. Disculpe las molestias!", "Ups!");
+                                    }
                                 }
-                            }
-                        });
+
+                                @Override
+                                public void onFailure(Call<DeviceModel> call, Throwable t) {
+                                    messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar en otro momento. Gracias ;)", "Ups!");
+                                    Log.d("DeviceToken", "DeviceToken Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
+                                }
+                            });
+                        }
                     }
                 });
+            }
+        });
 
         TextView txtName = findViewById(R.id.txtWelcome);
         TextView txtEmail = findViewById(R.id.txtEmail);
@@ -104,20 +104,17 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         imgExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder.setMessage("¿Desea salir de su cuenta?")
-                        .setCancelable(false)
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                logout();
+                builder.setMessage("¿Desea salir de su cuenta?").setCancelable(false).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        logout();
 
-                            }
-                        })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
                 AlertDialog alert = builder.create();
                 alert.setTitle("Cierre de Sesión");
                 alert.show();
@@ -128,55 +125,47 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        String token = task.getResult();
-                    }
-                });
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.page_home);
 
         txtEmail.setText(user.getEmail());
         String[] names = user.getDisplayName().split(" ");
-        txtName.setText("Bienvenido! "+ names[0]);
+        txtName.setText("Bienvenido! " + names[0]);
         Glide.with(getApplicationContext()).load(user.getPhotoUrl()).into(imgUser);
 
-        FragmentPayment fragment=new FragmentPayment();
-        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentHome, fragment,"");
+        FragmentPayment fragment = new FragmentPayment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentHome, fragment, "");
         fragmentTransaction.commit();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.page_home:
                 FragmentPayment frmPayment = new FragmentPayment();
-                fragmentTransaction.replace(R.id.fragmentHome, frmPayment,"");
+                fragmentTransaction.replace(R.id.fragmentHome, frmPayment, "");
                 fragmentTransaction.commit();
                 return true;
 
             case R.id.page_about:
                 FragmentAbout frmAbout = new FragmentAbout();
-                fragmentTransaction.replace(R.id.fragmentHome, frmAbout,"");
+                fragmentTransaction.replace(R.id.fragmentHome, frmAbout, "");
                 fragmentTransaction.commit();
                 return true;
 
             case R.id.page_payment:
 
                 FragmentQr frmQr = new FragmentQr();
-                fragmentTransaction.replace(R.id.fragmentHome, frmQr,"");
+                fragmentTransaction.replace(R.id.fragmentHome, frmQr, "");
                 fragmentTransaction.commit();
                 return true;
 
             case R.id.page_collect:
                 FragmentCollect frmCollect = new FragmentCollect();
-                fragmentTransaction.replace(R.id.fragmentHome, frmCollect,"");
+                fragmentTransaction.replace(R.id.fragmentHome, frmCollect, "");
                 fragmentTransaction.commit();
                 return true;
         }
@@ -192,23 +181,13 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer " + token)
-                        .header("Authorization", "Bearer " + token)
-                        .build();
+                Request newRequest = chain.request().newBuilder().addHeader("Content-Type", "application/json").addHeader("Authorization", "Bearer " + token).header("Authorization", "Bearer " + token).build();
                 return chain.proceed(newRequest);
             }
         }).build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(client)
-                .baseUrl(URL_NOTIFICATION_QR)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        Retrofit retrofit = new Retrofit.Builder().client(client).baseUrl(URL_NOTIFICATION_QR).addConverterFactory(GsonConverterFactory.create()).build();
         APITRecibo apitRecibo = retrofit.create(APITRecibo.class);
-
         DeviceModel dataModel = new DeviceModel(key);
         Call<DeviceModel> call = apitRecibo.putDeviceToken("Bearer {token}", dataModel);
 
@@ -218,13 +197,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     private void messageDialog(String text, String title) {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
-        builder.setMessage(text)
-                .setCancelable(false)
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        builder.setMessage(text).setCancelable(false).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
         AlertDialog alert = builder.create();
         alert.setTitle(title);
         alert.setIcon(R.drawable.ic_icon_warning_alert);

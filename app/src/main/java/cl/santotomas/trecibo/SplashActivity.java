@@ -9,14 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 
-import java.util.Random;
-
 public class SplashActivity extends AppCompatActivity {
 
-    private final int progressStatus = 0;
-    private ProgressBar progressBar;
     private final Handler handler = new Handler();
-    private final Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,6 +3,8 @@ package cl.santotomas.trecibo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,13 +13,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,40 +40,31 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
-
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
-
     private Intent HomeActivity;
     private CircularProgressButton btnLogin;
-
     private TextInputEditText edTextEmail, edTextPassword;
     private TextInputLayout txtIEmail, txtIPassword;
-
     private AlertDialog.Builder builder;
-
-
-
     private RelativeLayout rlLogin;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         setContentView(R.layout.activity_login);
         rlLogin = findViewById(R.id.relativePayments);
         mAuth = FirebaseAuth.getInstance();
 
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    startActivity(HomeActivity);
-                }
+        firebaseAuthListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                startActivity(HomeActivity);
             }
         };
 
@@ -82,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         onCleanAllTextInputLayout();
 
 
-
         btnLogin = findViewById(R.id.cirLoginButton);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        HomeActivity = new Intent(this,cl.santotomas.trecibo.HomeActivity.class);
+        HomeActivity = new Intent(this, cl.santotomas.trecibo.HomeActivity.class);
     }
 
     @Override
@@ -114,122 +108,114 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-
-        if(user != null) {
+        if (user != null) {
             updateUI(user);
         }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            updateUI(null);
-                        }
-                    }
-                });
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    updateUI(user);
+                } else {
+                    updateUI(null);
+                }
+            }
+        });
     }
 
-    public void onLoginClick(View view){
+    public void onLoginClick(View view) {
         startActivity(new Intent(this, RegisterActivity.class));
-        overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.stay);
     }
 
     public void onEmailAndPassword(String mail, String password) {
-            mAuth.signInWithEmailAndPassword(mail,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                       updateUI(null);
-                    } else {
+        mAuth.signInWithEmailAndPassword(mail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    updateUI(null);
+                } else {
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    switch (errorCode) {
 
-                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                        case "ERROR_INVALID_CUSTOM_TOKEN":
+                            showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                            break;
 
-                        switch (errorCode) {
+                        case "ERROR_CUSTOM_TOKEN_MISMATCH":
+                            showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                            break;
 
-                            case "ERROR_INVALID_CUSTOM_TOKEN":
-                                showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
-                                break;
+                        case "ERROR_INVALID_CREDENTIAL":
+                            showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                            break;
 
-                            case "ERROR_CUSTOM_TOKEN_MISMATCH":
-                                showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
-                                break;
+                        case "ERROR_INVALID_EMAIL":
+                            showMessage("Campo \"Correo Electrónico\" erróneo.");
+                            break;
 
-                            case "ERROR_INVALID_CREDENTIAL":
-                                showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
-                                break;
+                        case "ERROR_WRONG_PASSWORD":
+                            showMessage("La contraseña no es válida o el usuario no tiene contraseña.");
+                            break;
 
-                            case "ERROR_INVALID_EMAIL":
-                                showMessage( "Campo \"Correo Electrónico\" erróneo.");
-                                break;
+                        case "ERROR_USER_MISMATCH":
+                            showMessage("Las credenciales proporcionadas no corresponden al usuario que inició sesión anteriormente.");
+                            break;
 
-                            case "ERROR_WRONG_PASSWORD":
-                                showMessage("La contraseña no es válida o el usuario no tiene contraseña.");
-                                break;
+                        case "ERROR_REQUIRES_RECENT_LOGIN":
+                            showMessage("Esta operación es confidencial y requiere autenticación reciente. Vuelva a iniciar sesión antes de volver a intentar esta solicitud.");
+                            break;
 
-                            case "ERROR_USER_MISMATCH":
-                                showMessage("Las credenciales proporcionadas no corresponden al usuario que inició sesión anteriormente.");
-                                break;
+                        case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
+                            showMessage("Ya existe una cuenta con la misma dirección de correo electrónico pero con diferentes credenciales de inicio de sesión. Inicie sesión con un proveedor asociado con esta dirección de correo electrónico.");
+                            break;
 
-                            case "ERROR_REQUIRES_RECENT_LOGIN":
-                                showMessage("Esta operación es confidencial y requiere autenticación reciente. Vuelva a iniciar sesión antes de volver a intentar esta solicitud.");
-                                break;
+                        case "ERROR_EMAIL_ALREADY_IN_USE":
+                            showMessage("La dirección de correo electrónico ya está en uso por otra cuenta.");
+                            break;
 
-                            case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                                showMessage("Ya existe una cuenta con la misma dirección de correo electrónico pero con diferentes credenciales de inicio de sesión. Inicie sesión con un proveedor asociado con esta dirección de correo electrónico.");
-                                break;
+                        case "ERROR_CREDENTIAL_ALREADY_IN_USE":
+                            showMessage("Esta credencial ya está asociada con una cuenta de usuario diferente.");
+                            break;
 
-                            case "ERROR_EMAIL_ALREADY_IN_USE":
-                                showMessage("La dirección de correo electrónico ya está en uso por otra cuenta.");
-                                break;
+                        case "ERROR_USER_DISABLED":
+                            showMessage("La cuenta de usuario ha sido deshabilitada.");
+                            break;
 
-                            case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-                                showMessage("Esta credencial ya está asociada con una cuenta de usuario diferente.");
-                                break;
+                        case "ERROR_USER_TOKEN_EXPIRED":
+                            showMessage("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.");
+                            break;
 
-                            case "ERROR_USER_DISABLED":
-                                showMessage("La cuenta de usuario ha sido deshabilitada.");
-                                break;
+                        case "ERROR_USER_NOT_FOUND":
+                            showMessage("El correo eletrónico o contraseña proporcionada no es válido.");
+                            break;
 
-                            case "ERROR_USER_TOKEN_EXPIRED":
-                                showMessage("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.");
-                                break;
+                        case "ERROR_INVALID_USER_TOKEN":
+                            showMessage("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.");
+                            break;
 
-                            case "ERROR_USER_NOT_FOUND":
-                                showMessage("El correo eletrónico o contraseña proporcionada no es válido.");
-                                break;
+                        case "ERROR_OPERATION_NOT_ALLOWED":
+                            showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
+                            break;
 
-                            case "ERROR_INVALID_USER_TOKEN":
-                                showMessage("La credencial del usuario ya no es válida. El usuario debe iniciar sesión de nuevo.");
-                                break;
-
-                            case "ERROR_OPERATION_NOT_ALLOWED":
-                                showMessage("Favor comunicarse con \"Soporte\" al correo eletrónico soporte@trecibo.cl.");
-                                break;
-
-                            case "ERROR_WEAK_PASSWORD":
-                                showMessage("La contraseña proporcionada no es válida.");
-                                break;
-                        }
+                        case "ERROR_WEAK_PASSWORD":
+                            showMessage("La contraseña proporcionada no es válida.");
+                            break;
                     }
                 }
-            });
+            }
+        });
     }
-
-
 
     private void updateUI(FirebaseUser user) {
 
         BiometricPrompt biometricPrompt = onBiometricCreate();
-        final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("tRecibo")
-                .setDescription("Autenticación Multiples Factores (2FA)").setNegativeButtonText("Cancelar").build();
-
+        final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("tRecibo").setDescription("Autenticación Multiples Factores (2FA)").setNegativeButtonText("Cancelar").build();
         biometricPrompt.authenticate(promptInfo);
     }
 
@@ -263,8 +249,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private static void toggleTextInputLayoutError(@NonNull TextInputLayout textInputLayout,
-                                                   String msg) {
+    private static void toggleTextInputLayoutError(@NonNull TextInputLayout textInputLayout, String msg) {
         textInputLayout.setError(msg);
         textInputLayout.setErrorEnabled(msg != null);
     }
@@ -272,12 +257,11 @@ public class LoginActivity extends AppCompatActivity {
     private void showMessage(String text) {
         builder = new AlertDialog.Builder(this);
 
-        builder.setMessage(text)
-                .setCancelable(false)
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();                    }
-                });
+        builder.setMessage(text).setCancelable(false).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
         AlertDialog alertDialog = builder.create();
         alertDialog.setIcon(R.drawable.ic_icon_error_alert);
         alertDialog.setTitle("Validación");
@@ -321,6 +305,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(HomeActivity);
                 finish();
             }
+
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();

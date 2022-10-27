@@ -12,17 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
+
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cl.santotomas.trecibo.datamodels.CreateQRModel;
 import cl.santotomas.trecibo.interfaces.APITRecibo;
@@ -66,49 +65,39 @@ public class FragmentCollect extends Fragment {
         txtIReason = (TextInputLayout) view.findViewById(R.id.textInputReason);
 
         CircularProgressButton cirButton = (CircularProgressButton) view.findViewById(R.id.cirQRButton);
-        cirButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            if (validateCollect()) {
-                                FragmentViewqr dialogFragment = new FragmentViewqr();
-                                Call call = postCreateQR(edTextAmount.getText().toString(), edTextReason.getText().toString(), task.getResult().getToken());
-                                call.enqueue(new Callback<CreateQRModel>() {
-                                    @Override
-                                    public void onResponse(Call<CreateQRModel> call, Response<CreateQRModel> response) {
-                                        if (response.body() != null) {
-                                            if (response.body().getData() != null) {
-                                                Bundle bViewQR = new Bundle();
-                                                bViewQR.putString("qr", response.body().getData());
-                                                dialogFragment.setArguments(bViewQR);
-                                                dialogFragment.show(getChildFragmentManager(), "");
-                                            }
-                                        }
-                                        else {
-                                            messageDialog("Nuestros sistemas presenta problemas. Favor de volver a intentar en unos instantes. Disculpe las molestias!", "Ups!");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<CreateQRModel> call, Throwable t) {
-                                        messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar el cobro en otro momento. Gracias ;)", "Ups!");
-                                        Log.d("PostCreateQR", "PostCreateQR Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
-                                    }
-                                });
+        cirButton.setOnClickListener(view1 -> mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (validateCollect()) {
+                    FragmentViewqr dialogFragment = new FragmentViewqr();
+                    Call call = postCreateQR(edTextAmount.getText().toString(), edTextReason.getText().toString(), task.getResult().getToken());
+                    call.enqueue(new Callback<CreateQRModel>() {
+                        @Override
+                        public void onResponse(Call<CreateQRModel> call, Response<CreateQRModel> response) {
+                            if (response.body() != null) {
+                                if (response.body().getData() != null) {
+                                    Bundle bViewQR = new Bundle();
+                                    bViewQR.putString("qr", response.body().getData());
+                                    dialogFragment.setArguments(bViewQR);
+                                    dialogFragment.show(getChildFragmentManager(), "");
+                                }
+                            } else {
+                                messageDialog("Nuestros sistemas presenta problemas. Favor de volver a intentar en unos instantes. Disculpe las molestias!", "Ups!");
                             }
                         }
-                    }
-                });
+
+                        @Override
+                        public void onFailure(Call<CreateQRModel> call, Throwable t) {
+                            messageDialog("Tenemos problemas en la plataforma, por favor vuelva a intentar el cobro en otro momento. Gracias ;)", "Ups!");
+                            Log.d("PostCreateQR", "PostCreateQR Exception -> " + ((t != null && t.getMessage() != null) ? t.getMessage() : "---"));
+                        }
+                    });
+                }
             }
-        });
+        }));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_collect, container, false);
     }
 
@@ -119,20 +108,12 @@ public class FragmentCollect extends Fragment {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer " + token)
-                        .header("Authorization", "Bearer " + token)
-                        .build();
+                Request newRequest = chain.request().newBuilder().addHeader("Content-Type", "application/json").addHeader("Authorization", "Bearer " + token).header("Authorization", "Bearer " + token).build();
                 return chain.proceed(newRequest);
             }
         }).build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(client)
-                .baseUrl(URL_CREATE_QR)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().client(client).baseUrl(URL_CREATE_QR).addConverterFactory(GsonConverterFactory.create()).build();
 
         APITRecibo apitRecibo = retrofit.create(APITRecibo.class);
 
@@ -176,13 +157,11 @@ public class FragmentCollect extends Fragment {
     private void messageDialog(String text, String title) {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(text)
-                .setCancelable(false)
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        builder.setMessage(text).setCancelable(false).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
         AlertDialog alert = builder.create();
         alert.setTitle(title);
         alert.setIcon(R.drawable.ic_icon_warning_alert);
