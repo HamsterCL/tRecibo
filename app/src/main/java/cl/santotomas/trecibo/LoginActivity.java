@@ -7,9 +7,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.concurrent.Executor;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
@@ -74,6 +80,8 @@ public class LoginActivity extends AppCompatActivity {
         txtIPassword = findViewById(R.id.textInputPassword);
 
         onCleanAllTextInputLayout();
+
+
 
         btnLogin = findViewById(R.id.cirLoginButton);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        updateUI(null);
+                       updateUI(null);
                     } else {
 
                         String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -217,8 +225,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void updateUI(FirebaseUser user) {
-        startActivity(HomeActivity);
-        finish();
+
+        BiometricPrompt biometricPrompt = onBiometricCreate();
+        final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("tRecibo")
+                .setDescription("Autenticación Multiples Factores (2FA)").setNegativeButtonText("Cancelar").build();
+
+        biometricPrompt.authenticate(promptInfo);
     }
 
     private boolean validateCredentials() {
@@ -292,6 +304,30 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private BiometricPrompt onBiometricCreate() {
+
+        Executor executor = ContextCompat.getMainExecutor(getApplicationContext());
+        final BiometricPrompt biometricPrompt = new BiometricPrompt(LoginActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                startActivity(HomeActivity);
+                finish();
+            }
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+
+        return biometricPrompt;
     }
 
 }

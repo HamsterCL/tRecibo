@@ -110,8 +110,7 @@
                         android:layout_width="41dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="2dp"
-                        android:layout_toEndOf="@+id/textView9"
-                        android:src="@drawable/ic_about_tech_firebase" />
+                        android:layout_toEndOf="@+id/textView9" />
 
                     <ImageView
                         android:id="@+id/imageView6"
