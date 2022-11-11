@@ -5,10 +5,10 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "cl.santotomas.vergara.trecibo"
-        minSdkVersion 33
+        minSdkVersion 29
         targetSdkVersion 33
-        versionCode 10202000
-        versionName "1.2.2"
+        versionCode 10203000
+        versionName "1.2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
