@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cl.santotomas.trecibo.RegisterActivity"
+    tools:context="cl.santotomas.trecibo.cl.santotomas.vergara.trecibo.trecibo.RegisterActivity"
     android:background="@color/register_bk_color"
     android:focusableInTouchMode="true"
     android:gravity="center"

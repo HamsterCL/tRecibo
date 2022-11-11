@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FragmentPayqr">
+    tools:context="cl.santotomas.vergara.trecibo.trecibo.FragmentPayqr">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:background="@color/login_bk_color"
         android:focusableInTouchMode="true"
         android:gravity="center"
-        tools:context=".FragmentPayqr">
+        tools:context="cl.santotomas.vergara.trecibo.trecibo.FragmentPayqr">
 
         <ScrollView
             android:layout_width="363dp"

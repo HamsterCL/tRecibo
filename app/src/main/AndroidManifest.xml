@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="cl.santotomas.trecibo" >
+    package="cl.santotomas.vergara.trecibo"
+    android:versionCode="10202000"
+    android:versionName="1.2.2" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -9,7 +11,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="cl.santotomas.trecibo.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
-    <permission android:name="cl.santotomas.trecibo.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission android:name="cl.santotomas.vergara.trecibo.C2D_MESSAGE" android:protectionLevel="signature" />
 
     <application
         android:allowBackup="true"
@@ -44,7 +46,7 @@
             android:value="barcode" />
 
         <activity
-            android:name=".HomeActivity"
+            android:name="cl.santotomas.vergara.trecibo.HomeActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
@@ -52,7 +54,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name="cl.santotomas.vergara.trecibo.SplashActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -66,14 +68,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="cl.santotomas.vergara.trecibo.LoginActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RegisterActivity"
+            android:name="cl.santotomas.vergara.trecibo.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AccountActivity"
+            android:name="cl.santotomas.vergara.trecibo.AccountActivity"
             android:exported="true" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -81,7 +83,7 @@
         </activity>
 
         <service
-            android:name=".message.services.FirebaseMessageService"
+            android:name="cl.santotomas.vergara.trecibo.message.services.FirebaseMessageService"
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

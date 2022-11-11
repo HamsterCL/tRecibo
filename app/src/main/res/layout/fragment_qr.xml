@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".FragmentQr">
+tools:context="cl.santotomas.vergara.trecibo.trecibo.FragmentQr">
 
 <RelativeLayout
     android:id="@+id/relativePayments"
@@ -14,7 +14,7 @@ tools:context=".FragmentQr">
     android:background="@color/login_bk_color"
     android:focusableInTouchMode="true"
     android:gravity="center"
-    tools:context=".FragmentQr">
+    tools:context="cl.santotomas.vergara.trecibo.trecibo.FragmentQr">
 
     <ScrollView
         android:layout_width="363dp"

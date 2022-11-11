@@ -8,7 +8,7 @@
     android:layout_gravity="center"
     android:background="@color/login_bk_color"
     android:focusableInTouchMode="true"
-    tools:context="cl.santotomas.trecibo.HomeActivity">
+    tools:context="cl.santotomas.trecibo.cl.santotomas.vergara.trecibo.trecibo.HomeActivity">
 
     <View
         android:id="@+id/view3"
