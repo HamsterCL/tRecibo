@@ -7,13 +7,12 @@ android {
         applicationId "cl.santotomas.vergara.trecibo"
         minSdkVersion 29
         targetSdkVersion 33
-        versionCode 10203000
-        versionName "1.2.3"
+        versionCode 10205000
+        versionName "1.2.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

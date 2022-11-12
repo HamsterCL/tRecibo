@@ -1,5 +1,7 @@
 package cl.santotomas.vergara.trecibo;
 
+import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
@@ -209,11 +212,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
 
-        //BiometricPrompt biometricPrompt = onBiometricCreate();
-        //final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("tRecibo").setDescription("Autenticación Multiples Factores (2FA)").setNegativeButtonText("Cancelar").build();
-        //biometricPrompt.authenticate(promptInfo);
-        startActivity(HomeActivity);
-        finish();
+        BiometricPrompt biometricPrompt = onBiometricCreate();
+        final BiometricPrompt.PromptInfo promptInfo =
+                new BiometricPrompt.PromptInfo.Builder().
+                        setTitle("tRecibo").
+                        setDescription("Autenticación Biométrica").
+                        setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG).
+                        setNegativeButtonText("Cancelar").build();
+        biometricPrompt.authenticate(promptInfo);
+
     }
 
     private boolean validateCredentials() {
