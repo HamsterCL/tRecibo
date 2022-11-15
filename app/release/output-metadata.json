@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "cl.santotomas.vergara.trecibo",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 10407020,
+      "versionName": "1.4.7.2",
+      "outputFile": "app-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

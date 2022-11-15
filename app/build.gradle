@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 32
     defaultConfig {
         applicationId "cl.santotomas.vergara.trecibo"
-        minSdkVersion 29
-        targetSdkVersion 31
-        versionCode 10407000
-        versionName "1.4.7"
+        minSdkVersion 23
+        targetSdkVersion 32
+        versionCode 10407030
+        versionName "1.4.7.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
