@@ -1,7 +1,5 @@
 package cl.santotomas.vergara.trecibo;
 
-import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -136,7 +134,31 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    updateUI(null);
+
+                    BiometricManager biometricManager = androidx.biometric.BiometricManager.from(getApplicationContext());
+                    switch (biometricManager.canAuthenticate()) {
+                        case BiometricManager.BIOMETRIC_SUCCESS:
+                            updateUI(null);
+                            break;
+                        case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                            showMessage("Este dispositivo no tiene un sensor biométrico.");
+                            startActivity(HomeActivity);
+                            finish();
+                            break;
+
+                        case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                            showMessage("El sensor biométrico no está disponible actualmente.");
+                            startActivity(HomeActivity);
+                            finish();
+                            break;
+
+                        case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                            showMessage("Su dispositivo no tiene huella digital guardada, verifique su configuración de seguridad");
+                            startActivity(HomeActivity);
+                            finish();
+                            break;
+                    }
+
                 } else {
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                     switch (errorCode) {
@@ -217,7 +239,7 @@ public class LoginActivity extends AppCompatActivity {
                 new BiometricPrompt.PromptInfo.Builder().
                         setTitle("tRecibo").
                         setDescription("Autenticación Biométrica").
-                        setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG).
+                        setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK).
                         setNegativeButtonText("Cancelar").build();
         biometricPrompt.authenticate(promptInfo);
 
@@ -297,6 +319,7 @@ public class LoginActivity extends AppCompatActivity {
     private BiometricPrompt onBiometricCreate() {
 
         Executor executor = ContextCompat.getMainExecutor(getApplicationContext());
+
         final BiometricPrompt biometricPrompt = new BiometricPrompt(LoginActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
