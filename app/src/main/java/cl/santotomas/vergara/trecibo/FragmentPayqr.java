@@ -9,11 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +27,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import cl.santotomas.vergara.trecibo.datamodels.History;
 import cl.santotomas.vergara.trecibo.datamodels.ValidateQRModel;
 import cl.santotomas.vergara.trecibo.watchers.MoneyTextWatcher;
 
@@ -30,6 +37,9 @@ public class FragmentPayqr extends DialogFragment {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy hh:mm a", new Locale("es", "CL"));
     private static final String URL_TRANSBANK_CREATE = "https://webpay3gint.transbank.cl/webpayserver/initTransaction";
     public ValidateQRModel validate;
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
 
     @Override
@@ -62,6 +72,7 @@ public class FragmentPayqr extends DialogFragment {
             txtDate.setText(dte);
             txtAmount.setText(validate.getAmount());
             txtReason.setText(validate.getReason());
+            this.databaseHistory(validate);
         }
 
         ciPay.setOnClickListener(view1 -> {
@@ -79,5 +90,27 @@ public class FragmentPayqr extends DialogFragment {
             alert.show();
         });
 
+    }
+
+    public void databaseHistory(ValidateQRModel validate) {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("History"+System.currentTimeMillis());
+        History history = new History();
+        history.setAmount(Double.parseDouble(validate.getAmount()));
+        history.setReason(validate.getReason());
+        history.setToken(validate.getId_session());
+        history.setDate(System.currentTimeMillis());
+        history.setFunctionality("Pay");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                databaseReference.setValue(history);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("DB Firebase", "Error Database Firebase");
+            }
+        });
     }
 }

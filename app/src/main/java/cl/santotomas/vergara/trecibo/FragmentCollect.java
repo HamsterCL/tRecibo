@@ -16,14 +16,21 @@ import android.view.ViewGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cl.santotomas.vergara.trecibo.datamodels.CreateQRModel;
+import cl.santotomas.vergara.trecibo.datamodels.History;
 import cl.santotomas.vergara.trecibo.interfaces.APITRecibo;
 import cl.santotomas.vergara.trecibo.watchers.MoneyTextWatcher;
 import okhttp3.Interceptor;
@@ -40,6 +47,8 @@ public class FragmentCollect extends Fragment {
     private FirebaseAuth mAuth;
     private TextInputEditText edTextAmount, edTextReason;
     private TextInputLayout txtIAmount, txtIReason;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     private static final NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CL"));
 
@@ -116,6 +125,25 @@ public class FragmentCollect extends Fragment {
         Retrofit retrofit = new Retrofit.Builder().client(client).baseUrl(URL_CREATE_QR).addConverterFactory(GsonConverterFactory.create()).build();
 
         APITRecibo apitRecibo = retrofit.create(APITRecibo.class);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("History"+System.currentTimeMillis());
+        History history = new History();
+        history.setAmount(Double.parseDouble(finalAmount));
+        history.setReason(reason);
+        history.setToken(token);
+        history.setDate(System.currentTimeMillis());
+        history.setFunctionality("Collect");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                databaseReference.setValue(history);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("DB Firebase", "Error Database Firebase");
+            }
+        });
 
         CreateQRModel dataModel = new CreateQRModel(finalAmount, reason);
         Call<CreateQRModel> call = apitRecibo.postCreateQR("Bearer {token}", dataModel);

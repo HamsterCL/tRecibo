@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
@@ -134,30 +135,27 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
                     BiometricManager biometricManager = androidx.biometric.BiometricManager.from(getApplicationContext());
                     switch (biometricManager.canAuthenticate()) {
                         case BiometricManager.BIOMETRIC_SUCCESS:
                             updateUI(null);
                             break;
                         case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                            showMessage("Este dispositivo no tiene un sensor biométrico.");
                             startActivity(HomeActivity);
                             finish();
                             break;
 
                         case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                            showMessage("El sensor biométrico no está disponible actualmente.");
                             startActivity(HomeActivity);
                             finish();
                             break;
 
                         case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                            showMessage("Su dispositivo no tiene huella digital guardada, verifique su configuración de seguridad");
                             startActivity(HomeActivity);
                             finish();
                             break;
                     }
+
 
                 } else {
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -292,6 +290,7 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setIcon(R.drawable.ic_icon_error_alert);
         alertDialog.setTitle("Validación");
         alertDialog.show();
+
     }
 
     private void onCleanAllTextInputLayout() {
