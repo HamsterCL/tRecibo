@@ -5,10 +5,10 @@ android {
     compileSdkVersion 32
     defaultConfig {
         applicationId "cl.santotomas.vergara.trecibo"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 32
-        versionCode 10501000
-        versionName "1.5.1.0"
+        versionCode 10502000
+        versionName "1.5.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,7 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '33.0.0'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     namespace 'cl.santotomas.vergara.trecibo'
 }
 
